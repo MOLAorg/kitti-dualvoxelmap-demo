@@ -71,13 +71,14 @@ void TestVoxelMapFromKitti(
 	// ----------------------
 	// Voxel map
 	// ----------------------
-	mola::DualVoxelPointCloud map(VOXELMAP_RESOLUTION, VOXELMAP_RESOLUTION);
+	mola::DualVoxelPointCloud map(VOXELMAP_RESOLUTION);
 
 	// map.insertionOptions.max_range = VOXELMAP_MAX_RANGE;  // [m]
 	// map.insertionOptions.ray_trace_free_space = false;	// only occupied
 
 	// map.insertionOptions.prob_hit = 0.53;
 	map.renderOptions.point_size = 2.0f;
+	map.renderOptions.show_inner_grid_boxes = true;
 
 	// gui and demo app:
 	mrpt::gui::CDisplayWindow3D win("KITTI VoxelMap demo", 800, 600);
