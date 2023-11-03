@@ -37,6 +37,8 @@
  *
  */
 
+//#define USE_GUI
+
 mrpt::system::CTimeLogger profiler;
 
 // ------------------------------------------------------
@@ -81,6 +83,7 @@ void TestVoxelMapFromKitti(
 	map.renderOptions.show_inner_grid_boxes = true;
 
 	// gui and demo app:
+#ifdef USE_GUI
 	mrpt::gui::CDisplayWindow3D win("KITTI VoxelMap demo", 800, 600);
 
 	auto glVoxelMap = mrpt::opengl::CSetOfObjects::Create();
@@ -118,16 +121,22 @@ void TestVoxelMapFromKitti(
 	}
 
 	std::cout << "Close the window to exit" << std::endl;
+#endif
 
 	size_t datasetIndex = 0;
 	bool paused = false;
 
 	mrpt::Clock::time_point lastObsTim;
 
+#ifdef USE_GUI
 	while (win.isOpen())
+#else
+	while (!mrpt::system::os::kbhit())
+#endif
 	{
+#ifdef USE_GUI
 		win.get3DSceneAndLock();
-
+#endif
 		// Get and process one observation:
 		if (datasetIndex < gt.size() && !paused)
 		{
@@ -142,15 +151,15 @@ void TestVoxelMapFromKitti(
 
 			mrpt::math::TPose3D gtPose = gtPoseIt->second;
 
+#ifdef USE_GUI
 			// win.setCameraPointingToPoint(gtPose.x, gtPose.y, gtPose.z);
-
 			// set viz camera pose:
 			glVehicle->setPose(gtPose);
 
 			// draw observation raw data:
 			glObsPts->loadFromPointsMap(obs->pointcloud.get());
 			glObsPts->setPose(obs->sensorPose);
-
+#endif
 			// update the voxel map:
 			mrpt::system::CTimeLoggerEntry tle1(profiler, "insertObservation");
 
@@ -158,6 +167,7 @@ void TestVoxelMapFromKitti(
 
 			tle1.stop();
 
+#ifdef USE_GUI
 			// Update the voxel map visualization:
 			static int decimUpdateViz = 0;
 			if (decimUpdateViz++ > 40)
@@ -174,10 +184,17 @@ void TestVoxelMapFromKitti(
 			// RGB view:
 			auto obsIm = kittiDataset.getImage(0, datasetIndex);
 			if (obsIm) { glViewRGB->setImageView(obsIm->image); }
+#endif
 
 			datasetIndex++;
 		}
 
+		const auto msg = mrpt::format(
+			"Timestamp: %s datasetIndex: %zu",
+			mrpt::system::dateTimeLocalToString(lastObsTim).c_str(),
+			datasetIndex);
+
+#ifdef USE_GUI
 		win.unlockAccess3DScene();
 
 		if (win.keyHit())
@@ -190,18 +207,15 @@ void TestVoxelMapFromKitti(
 			};
 		}
 
-		win.addTextMessage(
-			5, 5,
-			mrpt::format(
-				"Timestamp: %s datasetIndex: %zu",
-				mrpt::system::dateTimeLocalToString(lastObsTim).c_str(),
-				datasetIndex),
-			1 /*id*/);
+		win.addTextMessage(5, 5, msg, 1 /*id*/);
 
 		win.repaint();
 
 		using namespace std::chrono_literals;
 		std::this_thread::sleep_for(10ms);
+#else
+		std::cout << msg << std::endl;
+#endif
 	};
 }
 
