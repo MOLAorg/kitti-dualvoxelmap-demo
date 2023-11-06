@@ -8,7 +8,7 @@
    +------------------------------------------------------------------------+ */
 
 #include <mola_input_kitti_dataset/KittiOdometryDataset.h>
-#include <mola_metric_maps/DualVoxelPointCloud.h>
+#include <mola_metric_maps/SparseVoxelPointCloud.h>
 #include <mola_yaml/yaml_helpers.h>
 #include <mrpt/gui/CDisplayWindow3D.h>
 #include <mrpt/io/lazy_load_path.h>
@@ -33,11 +33,11 @@
  *
  * KITTI_BASE_DIR=/path/to/kitti/dataset \
  * KITTI_SEQ=00 \
- * ./kitti-dualvoxelmap-demo 0.10
+ * ./kitti-sparsevoxelmap-demo 0.50
  *
  */
 
-//#define USE_GUI
+#define USE_GUI
 
 mrpt::system::CTimeLogger profiler;
 
@@ -73,7 +73,7 @@ void TestVoxelMapFromKitti(
 	// ----------------------
 	// Voxel map
 	// ----------------------
-	mola::DualVoxelPointCloud map(VOXELMAP_RESOLUTION);
+	mola::SparseVoxelPointCloud map(VOXELMAP_RESOLUTION);
 
 	// map.insertionOptions.max_range = VOXELMAP_MAX_RANGE;  // [m]
 	// map.insertionOptions.ray_trace_free_space = false;	// only occupied

@@ -1,4 +1,4 @@
-project(kitti-dualvoxelmap-demo)
+project(kitti-sparsevoxelmap-demo)
 
 cmake_minimum_required(VERSION 3.1)
 
@@ -29,6 +29,8 @@ target_link_libraries(${PROJECT_NAME}
 	mola_yaml
 	mola_metric_maps
 )
+
+install(TARGETS ${PROJECT_NAME})
 
 # Set optimized building:
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR CMAKE_COMPILER_IS_GNUCXX)
