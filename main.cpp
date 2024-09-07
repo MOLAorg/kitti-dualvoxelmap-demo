@@ -8,14 +8,22 @@
 // --------------------------------------------------
 // Uncomment just one:
 // --------------------------------------------------
-#define MAP_SPARSE_VOXEL_POINT_CLOUD
-
+//#define MAP_SPARSE_VOXEL_POINT_CLOUD
+#define MAP_HASHED_VOXEL_MAP
+//#define MAP_SIMPLE_POINT_MAP
+//#define MAP_SPARSE_TREES
 // --------------------------------------------------
 
 #include <mola_input_kitti_dataset/KittiOdometryDataset.h>
 
 #if defined(MAP_SPARSE_VOXEL_POINT_CLOUD)
 #include <mola_metric_maps/SparseVoxelPointCloud.h>
+#elif defined(MAP_HASHED_VOXEL_MAP)
+#include <mola_metric_maps/HashedVoxelPointCloud.h>
+#elif defined(MAP_SIMPLE_POINT_MAP)
+#include <mrpt/maps/CSimplePointsMap.h>
+#elif defined(MAP_SPARSE_TREES)
+#include <mola_metric_maps/SparseTreesPointCloud.h>
 #else
 #error No known map type to use!
 #endif
@@ -91,6 +99,19 @@ void TestVoxelMapFromKitti(
 	// map.insertionOptions.ray_trace_free_space = false;	// only occupied
 
 	// map.insertionOptions.prob_hit = 0.53;
+	map.renderOptions.point_size = 2.0f;
+	map.renderOptions.show_inner_grid_boxes = true;
+#elif defined(MAP_HASHED_VOXEL_MAP)
+	mola::HashedVoxelPointCloud map(VOXELMAP_RESOLUTION);
+
+	map.renderOptions.point_size = 2.0f;
+#elif defined(MAP_SIMPLE_POINT_MAP)
+	mrpt::maps::CSimplePointsMap map;
+
+	map.renderOptions.point_size = 2.0f;
+#elif defined(MAP_SPARSE_TREES)
+	mola::SparseTreesPointCloud map(VOXELMAP_RESOLUTION);
+
 	map.renderOptions.point_size = 2.0f;
 	map.renderOptions.show_inner_grid_boxes = true;
 #else
