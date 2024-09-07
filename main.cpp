@@ -1,14 +1,25 @@
 /* +------------------------------------------------------------------------+
-   |                     Mobile Robot Programming Toolkit (MRPT)            |
-   |                          https://www.mrpt.org/                         |
+   |     mola_benchmark_metric_maps_kitti                                   |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
-   | See: https://www.mrpt.org/Authors - All rights reserved.               |
-   | Released under BSD License. See: https://www.mrpt.org/License          |
+   | Copyright (c) 2023-24, Individual contributors, see Git commits        |
+   | Released under BSD License.                                            |
    +------------------------------------------------------------------------+ */
 
+// --------------------------------------------------
+// Uncomment just one:
+// --------------------------------------------------
+#define MAP_SPARSE_VOXEL_POINT_CLOUD
+
+// --------------------------------------------------
+
 #include <mola_input_kitti_dataset/KittiOdometryDataset.h>
+
+#if defined(MAP_SPARSE_VOXEL_POINT_CLOUD)
 #include <mola_metric_maps/SparseVoxelPointCloud.h>
+#else
+#error No known map type to use!
+#endif
+
 #include <mola_yaml/yaml_helpers.h>
 #include <mrpt/gui/CDisplayWindow3D.h>
 #include <mrpt/io/lazy_load_path.h>
@@ -71,8 +82,9 @@ void TestVoxelMapFromKitti(
 	std::cout << "Ground truth trajectory has: " << gt.size() << " poses.\n";
 
 	// ----------------------
-	// Voxel map
+	// The map
 	// ----------------------
+#if defined(MAP_SPARSE_VOXEL_POINT_CLOUD)
 	mola::SparseVoxelPointCloud map(VOXELMAP_RESOLUTION);
 
 	// map.insertionOptions.max_range = VOXELMAP_MAX_RANGE;  // [m]
@@ -81,6 +93,9 @@ void TestVoxelMapFromKitti(
 	// map.insertionOptions.prob_hit = 0.53;
 	map.renderOptions.point_size = 2.0f;
 	map.renderOptions.show_inner_grid_boxes = true;
+#else
+#error No known map type to use!
+#endif
 
 	// gui and demo app:
 #ifdef USE_GUI

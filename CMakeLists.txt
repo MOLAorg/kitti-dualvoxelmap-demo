@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-project(kitti-sparsevoxelmap-demo)
+project(mola_benchmark_metric_maps_kitti)
 
 
 # ---------------------------------------------------------------------------

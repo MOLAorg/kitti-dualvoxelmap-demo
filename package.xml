@@ -4,12 +4,12 @@
      side-by-side to ROS packages in a catkin/ament environment.
 -->
 <package format="3">
-  <name>kitti_sparsevoxelmap_demo</name>
+  <name>mola_benchmark_metric_maps_kitti</name>
   <version>0.0.1</version>
-  <description>kitti_sparsevoxelmap_demo</description>
+  <description>Benchmark metric map implementations using the KITTI dataset</description>
 
   <maintainer email="joseluisblancoc@gmail.com">Jose-Luis Blanco-Claraco</maintainer>
-  <license>GPLv3</license>
+  <license>BSD</license>
 
   <depend>mrpt_libmaps</depend>
   <depend>mrpt_libgui</depend>
