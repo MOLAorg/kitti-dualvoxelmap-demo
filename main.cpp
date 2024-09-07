@@ -140,8 +140,9 @@ void TestVoxelMapFromKitti(
 		// Get and process one observation:
 		if (datasetIndex < gt.size() && !paused)
 		{
-			mrpt::obs::CObservationPointCloud::Ptr obs =
-				kittiDataset.getPointCloud(datasetIndex);
+			auto obs =
+				std::dynamic_pointer_cast<mrpt::obs::CObservationPointCloud>(
+					kittiDataset.getPointCloud(datasetIndex));
 			if (!obs) break;
 
 			lastObsTim = obs->timestamp;

@@ -1,6 +1,7 @@
+cmake_minimum_required(VERSION 3.8)
+
 project(kitti-sparsevoxelmap-demo)
 
-cmake_minimum_required(VERSION 3.1)
 
 # ---------------------------------------------------------------------------
 # Set the output directory of each example to its corresponding subdirectory
@@ -25,9 +26,9 @@ add_executable(${PROJECT_NAME} main.cpp)
 target_link_libraries(${PROJECT_NAME}
 	mrpt::maps
 	mrpt::gui
-	mola_input_kitti_dataset
-	mola_yaml
-	mola_metric_maps
+	mola::mola_input_kitti_dataset
+	mola::mola_yaml
+	mola::mola_metric_maps
 )
 
 install(TARGETS ${PROJECT_NAME})
