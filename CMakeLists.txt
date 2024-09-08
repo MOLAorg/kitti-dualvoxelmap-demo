@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.8)
 
-project(mola_benchmark_metric_maps_kitti)
+if("$ENV{ROS_VERSION}" STREQUAL "2")
+	set(DETECTED_ROS2 TRUE)
+endif()
+
+project(mola_benchmark_metric_maps_kitti LANGUAGES CXX)
 
 
 # ---------------------------------------------------------------------------
@@ -39,4 +43,18 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR CMAKE_COMPILER_IS_GNUCXX)
 		-Wall -pedantic
 		-O3
 		)
+endif()
+
+# -----------------------------------------------------------------------------
+#  ROS2
+# -----------------------------------------------------------------------------
+if (DETECTED_ROS2)
+	# find dependencies
+	find_package(ament_cmake REQUIRED)
+
+	#ament_target_dependencies(MY_TARGET
+	#  rclcpp...
+	#)
+
+	ament_package()
 endif()

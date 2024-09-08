@@ -8,15 +8,18 @@
 // --------------------------------------------------
 // Uncomment just one:
 // --------------------------------------------------
+#define MAP_NDT3D
 //#define MAP_SPARSE_VOXEL_POINT_CLOUD
-#define MAP_HASHED_VOXEL_MAP
+//#define MAP_HASHED_VOXEL_MAP
 //#define MAP_SIMPLE_POINT_MAP
 //#define MAP_SPARSE_TREES
 // --------------------------------------------------
 
 #include <mola_input_kitti_dataset/KittiOdometryDataset.h>
 
-#if defined(MAP_SPARSE_VOXEL_POINT_CLOUD)
+#if defined(MAP_NDT3D)
+#include <mola_metric_maps/NDT.h>
+#elif defined(MAP_SPARSE_VOXEL_POINT_CLOUD)
 #include <mola_metric_maps/SparseVoxelPointCloud.h>
 #elif defined(MAP_HASHED_VOXEL_MAP)
 #include <mola_metric_maps/HashedVoxelPointCloud.h>
@@ -92,7 +95,16 @@ void TestVoxelMapFromKitti(
 	// ----------------------
 	// The map
 	// ----------------------
-#if defined(MAP_SPARSE_VOXEL_POINT_CLOUD)
+#if defined(MAP_NDT3D)
+	mola::NDT map(VOXELMAP_RESOLUTION);
+
+	map.insertionOptions.min_distance_between_points = 0.4;
+	map.insertionOptions.max_eigen_ratio_for_planes = 0.05;
+
+	map.renderOptions.point_size = 2.0f;
+	map.renderOptions.points_visible = true;
+
+#elif defined(MAP_SPARSE_VOXEL_POINT_CLOUD)
 	mola::SparseVoxelPointCloud map(VOXELMAP_RESOLUTION);
 
 	// map.insertionOptions.max_range = VOXELMAP_MAX_RANGE;  // [m]
